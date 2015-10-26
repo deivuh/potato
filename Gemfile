@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
 
-gem 'sofa'
+gem 'tvdb_party'
 gem 'addic7ed'
-gem 'nokogiri'
+

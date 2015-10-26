@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
 
-require 'sofa'
+require 'tvdb_party'
 require 'addic7ed'
-require 'nokogiri'
 
-# File.open(ARGV[0]) do | file |
+
+
 
 
 
@@ -44,23 +44,29 @@ filenames.each do | filename |
     matching = filename.match regex
 
     if matching
-      parsed_show_name = matching.captures[0]
+      parsed_show_name = matching.captures[0].gsub('.',' ')
       season = matching.captures[1]
       episode = matching.captures[2]
       puts "Parsed show name: #{parsed_show_name}"
-      show = Sofa::TVRage::Show.by_name(parsed_show_name)
+      tvdb = TvdbParty::Search.new("53BFFAFDEABC08B3")  
+      results = tvdb.search(parsed_show_name)
+      # puts "Results: #{results}"  
+      first_result = results.first
+      puts "First result: #{first_result}"
+      show_id = first_result["seriesid"]
+      puts "Show id: #{show_id}"      
+      show = tvdb.get_series_by_id(show_id)
       show_name = show.name
       puts "Show name #{show_name}"
-      show_id = show.show_id
-      puts "Show id: #{show_id}"
-      url = "http://services.tvrage.com/myfeeds/episodeinfo.php?key=4f4oP0E4Ngy0NjPgz3uB&sid=#{show_id}&ep=#{season}x#{episode}"
-      xml = Nokogiri::XML(open(url))
-      episode_name = xml.at_xpath("show").at_xpath("episode").at_xpath("title").content
+      puts "Season #{season} Episode #{episode}"
+      episode_name = show.get_episode(season.to_i, episode.to_i).name      
       puts "Episode name: #{episode_name}"
 
 
+      puts "Renaming video file: #{file_dir}#{filename_no_ext}.#{filename_ext}" 
       File.rename("#{file_dir}#{filename_no_ext}.#{filename_ext}" , "#{show_name} - #{season}x#{episode} - #{episode_name}.#{filename_ext}")
-      File.rename("#{file_dir}#{filename_no_ext}.srt" , "#{show_name} - #{season}x#{episode} - #{episode_name}.srt")
+      puts "Renaming subtitle file: #{file_dir}#{filename_no_ext}.en.srt" 
+      File.rename("#{file_dir}#{filename_no_ext}.en.srt" , "#{show_name} - #{season}x#{episode} - #{episode_name}.en.srt")
 
 
     end

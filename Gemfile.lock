@@ -3,25 +3,23 @@ GEM
   specs:
     addic7ed (0.3.4)
       nokogiri
-    crack (0.4.2)
-      safe_yaml (~> 1.0.0)
-    httparty (0.13.1)
+    httparty (0.13.7)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
-    json (1.8.1)
+    json (1.8.3)
     mini_portile (0.6.0)
     multi_xml (0.5.5)
     nokogiri (1.6.3.1)
       mini_portile (= 0.6.0)
-    safe_yaml (1.0.4)
-    sofa (0.1.3)
-      crack
-      httparty
+    tvdb_party (0.8.1)
+      httparty (>= 0.6.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   addic7ed
-  nokogiri
-  sofa
+  tvdb_party
+
+BUNDLED WITH
+   1.10.6
